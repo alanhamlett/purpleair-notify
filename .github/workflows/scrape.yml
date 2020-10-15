@@ -9,6 +9,9 @@ on:
            # │  │ │ │ │
            # *  * * * *
     - cron: '27 * * * *'
+  push:
+    branches:
+      - master
 jobs:
   scrape:
     name: Check AQI

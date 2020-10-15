@@ -1,8 +1,4 @@
-name: PurpleAir AQI Check
-inputs:
-  pm25:
-    description: 'PM2.5'
-    required: true
+name: Email Notification
 on:
   workflow_run:
     workflows: ["PurpleAir Check"]

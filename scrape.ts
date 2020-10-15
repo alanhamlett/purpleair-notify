@@ -9,3 +9,5 @@ export const scrape = async () => {
   console.log(pm25);
   console.log(`::set-output name=pm25::${pm25}`);
 };
+
+scrape();

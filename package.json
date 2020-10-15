@@ -1,0 +1,29 @@
+{
+  "name": "purpleair-notify",
+  "version": "1.0.0",
+  "description": "Use GitHub Actions to record hourly PurpleAir sensor data, and notify by email when PM2.5 air quality above a certain threshold.",
+  "main": "dist/index.js",
+  "scripts": {
+    "scrape": "ts-node scrape.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alanhamlett/purpleair-notify.git"
+  },
+  "keywords": ["purpleair", "air-quality"],
+  "author": "Alan Hamlett <alan.hamlett@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alanhamlett/purpleair-notify/issues"
+  },
+  "homepage": "https://github.com/alanhamlett/purpleair-notify#readme",
+  "devDependencies": {
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "axios": "^0.20.0"
+  }
+}

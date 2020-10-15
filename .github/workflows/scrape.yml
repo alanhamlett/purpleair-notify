@@ -1,0 +1,28 @@
+name: PurpleAir Check
+on:
+  schedule:
+           # ┌───────────── minute (0 - 59)
+           # │  ┌───────────── hour (0 - 23)
+           # │  │ ┌───────────── day of the month (1 - 31)
+           # │  │ │ ┌───────────── month (1 - 12)
+           # │  │ │ │ ┌───────────── day of the week (0 - 6) (Sun to Sat)
+           # │  │ │ │ │
+           # *  * * * *
+    - cron: '27 * * * *'
+jobs:
+  scrape:
+    name: Check AQI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: npm install
+      - name: Run script
+        run: npm run scrape
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}

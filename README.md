@@ -1,6 +1,6 @@
 # purpleair-notify
 
-Watch this repo to receive an email whenever [PurpleAir][purpleair] sensor(s) go over an air quality PM2.5 threshold.
+Watch this repo to receive an email whenever [PurpleAir][purpleair] sensor(s) show AQI air quality PM2.5 as "unhealthy".
 
 ![AQI PM2.5 Table](/aqi_pm25_table.png?raw=true)
 

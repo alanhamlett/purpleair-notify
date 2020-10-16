@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as core from '@actions/core';
 
-function getAqiLabel(pm25: float): string {
+function getAqiLabel(pm25: number): string {
   const aqiTable = [
     [12, 'good'], // AQI 0-50
     [35.4, 'moderate'], // AQI 51-100
@@ -23,7 +23,7 @@ export const scrape = async () => {
 
   const url = 'https://www.purpleair.com/json?show=' + sensor_id;
   const response = await axios.get(url);
-  const pm25: float = parseFloat(response.data.results[0].pm2_5_cf_1);
+  const pm25: number = parseFloat(response.data.results[0].pm2_5_cf_1);
   console.log('PM2.5: ' + pm25.toString());
   console.log(`::set-output name=pm25::${pm25}`);
   const aqi = getAqiLabel(pm25);

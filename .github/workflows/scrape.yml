@@ -8,7 +8,7 @@ on:
            # │  │ │ │ ┌───────────── day of the week (0 - 6) (Sun to Sat)
            # │  │ │ │ │
            # *  * * * *
-    - cron: '27 * * * *'
+    - cron: '17,47 * * * *'
   push:
     branches:
       - master

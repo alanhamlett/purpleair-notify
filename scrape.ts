@@ -1,6 +1,15 @@
 import axios from 'axios';
 import * as core from '@actions/core';
 
+type Threshold = {
+  [key: string]: number;
+};
+
+const PM25_THRESHOLD: Threshold = {
+  outside: 100,
+  inside: 50,
+};
+
 type AQIRange = {
   cutoff: number;
   label: string;
@@ -22,21 +31,30 @@ function getAqiLabel(pm25: number): string {
   return aqiTable[-1].label;
 }
 
-export const scrape = async () => {
-  var sensor_id = process.env.SENSOR_ID || '19189';
-
-  const url = 'https://www.purpleair.com/json?show=' + sensor_id;
+async function checkAqi(sensor_id: string) {
+  const url = 'https://www.purpleair.com/json?show=' + sensor_id.toString();
   const response = await axios.get(url);
   const pm25 = parseFloat(response.data.results[0].pm2_5_cf_1);
+  const sensorName: string = response.data.results[0].Label;
+  const sensorType: string = response.data.results[0].DEVICE_LOCATIONTYPE;
   const aqi = getAqiLabel(pm25);
 
-  const PM25_THRESHOLD = 100;
-  if (pm25 >= PM25_THRESHOLD) {
-    const msg = `Air quality ${aqi}. PM2.5 ${pm25} over ${PM25_THRESHOLD} threshold!`;
+  const threshold = PM25_THRESHOLD[sensorType];
+  if (pm25 >= threshold) {
+    const msg = `Air quality ${aqi}. PM2.5 ${pm25} over ${threshold} threshold! From ${sensorName} (${sensor_id.toString()})`;
     console.log(msg);
     core.setFailed(msg);
   } else {
-    console.log(`Air quality ${aqi}. PM2.5 ${pm25} under threshold ${PM25_THRESHOLD}.`);
+    console.log(
+      `Air quality ${aqi}. PM2.5 ${pm25} under threshold ${threshold}. From ${sensorName} (${sensor_id.toString()})`,
+    );
+  }
+}
+
+export const scrape = () => {
+  var sensor_ids = process.env.SENSOR_IDS || '19189,64043,20203,62565';
+  for (var sensor_id of sensor_ids.split(',')) {
+    checkAqi(sensor_id);
   }
 };
 

@@ -40,7 +40,7 @@ async function checkAqi(sensor_id: string) {
   const aqi = getAqiLabel(pm25);
 
   const threshold = PM25_THRESHOLD[sensorType];
-  if (pm25 >= threshold || true) {
+  if (pm25 >= threshold) {
     const msg = `Air quality ${aqi}. PM2.5 ${pm25} over ${threshold} threshold! From ${sensorName} (${sensor_id.toString()})`;
     console.log(msg);
     core.setFailed(msg);

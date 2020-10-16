@@ -31,7 +31,19 @@ function getAqiLabel(pm25: number): string {
   return aqiTable[-1].label;
 }
 
-async function checkAqi(sensor_id: string) {
+async function getLastBuildStatus(): Promise<string> {
+  const repo = process.env.GITHUB_REPOSITORY || 'alanhamlett/purpleair-notify';
+  const url = `https://api.github.com/repos/${repo}/actions/runs`;
+  const response = await axios.get(url);
+  for (var build of response.data.workflow_runs) {
+    if (build.status == 'completed') {
+      return build.conclusion;
+    }
+  }
+  return 'unknown';
+}
+
+async function checkAqi(sensor_id: string, prevStatus: string) {
   const url = 'https://www.purpleair.com/json?show=' + sensor_id.toString();
   const response = await axios.get(url);
   const pm25 = parseFloat(response.data.results[0].pm2_5_cf_1);
@@ -43,20 +55,26 @@ async function checkAqi(sensor_id: string) {
   if (pm25 >= threshold) {
     const msg = `Air quality ${aqi}. PM2.5 ${pm25} over ${threshold} threshold! From ${sensorName} (${sensor_id.toString()})`;
     console.log(msg);
-    core.setFailed(msg);
-    throw new Error(msg);
+    if (prevStatus != 'failure') {
+      core.setFailed(msg);
+      throw new Error(msg);
+    }
   } else {
-    console.log(
-      `Air quality ${aqi}. PM2.5 ${pm25} under threshold ${threshold}. From ${sensorName} (${sensor_id.toString()})`,
-    );
+    const msg = `Air quality ${aqi}. PM2.5 ${pm25} under threshold ${threshold}. From ${sensorName} (${sensor_id.toString()})`;
+    console.log(msg);
+    if (prevStatus == 'failure') {
+      core.setFailed(msg);
+      throw new Error(msg);
+    }
   }
 }
 
-export const scrape = () => {
-  var sensor_ids = process.env.SENSOR_IDS || '19189,64043,20203,62565';
+export async function scrape() {
+  const sensor_ids = process.env.SENSOR_IDS || '19189,64043,20203,62565';
+  const prevStatus = await getLastBuildStatus();
   for (var sensor_id of sensor_ids.split(',')) {
-    checkAqi(sensor_id);
+    checkAqi(sensor_id, prevStatus);
   }
-};
+}
 
 scrape();

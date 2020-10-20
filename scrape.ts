@@ -62,10 +62,6 @@ async function checkAqi(sensor_id: string, prevStatus: string) {
   } else {
     const msg = `Air quality ${aqi}. PM2.5 ${pm25} under threshold ${threshold}. From ${sensorName} (${sensor_id.toString()})`;
     console.log(msg);
-    if (prevStatus == 'failure') {
-      core.setFailed(msg);
-      throw new Error(msg);
-    }
   }
 }
 

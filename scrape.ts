@@ -6,8 +6,8 @@ type Threshold = {
 };
 
 const PM25_THRESHOLD: Threshold = {
-  outside: 100,
-  inside: 50,
+  outside: 70,
+  inside: 30,
 };
 
 type AQIRange = {

@@ -6,7 +6,7 @@ type Threshold = {
 };
 
 const PM25_THRESHOLD: Threshold = {
-  outside: 70,
+  outside: 60,
   inside: 30,
 };
 
@@ -53,14 +53,14 @@ async function checkAqi(sensor_id: string, prevStatus: string) {
 
   const threshold = PM25_THRESHOLD[sensorType];
   if (pm25 >= threshold) {
-    const msg = `Air quality ${aqi}. PM2.5 ${pm25} over ${threshold} threshold! From ${sensorName} (${sensor_id.toString()})`;
+    const msg = `Air quality ${aqi}. PM2.5 ${pm25}. Over ${threshold} threshold! From ${sensorName} (${sensor_id.toString()})`;
     console.log(msg);
     if (prevStatus != 'failure') {
       core.setFailed(msg);
       throw new Error(msg);
     }
   } else {
-    const msg = `Air quality ${aqi}. PM2.5 ${pm25} under threshold ${threshold}. From ${sensorName} (${sensor_id.toString()})`;
+    const msg = `Air quality ${aqi}. PM2.5 ${pm25}. Lower than ${threshold} threshold. From ${sensorName} (${sensor_id.toString()})`;
     console.log(msg);
   }
 }

@@ -66,7 +66,7 @@ async function checkAqi(sensor_id: string, prevStatus: string) {
 }
 
 export async function scrape() {
-  const sensor_ids = process.env.SENSOR_IDS || '19189,20203,62565';
+  const sensor_ids = process.env.SENSOR_IDS || '19189,62565';
   const prevStatus = await getLastBuildStatus();
   for (var sensor_id of sensor_ids.split(',')) {
     checkAqi(sensor_id, prevStatus);
